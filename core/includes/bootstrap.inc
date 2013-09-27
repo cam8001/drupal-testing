@@ -993,8 +993,11 @@ function drupal_page_is_cacheable($allow_caching = NULL) {
     $allow_caching_static = $allow_caching;
   }
 
+  // We cannot check _menu_site_is_offline in bootstrap.inc as menu.inc has
+  // not been loaded yet. Without checking the site is offline, maintenance
+  // pages may be cached and returned after maintenance mode is switched off.
   return $allow_caching_static && ($_SERVER['REQUEST_METHOD'] == 'GET' || $_SERVER['REQUEST_METHOD'] == 'HEAD')
-    && !drupal_is_cli();
+    && !drupal_is_cli() && !Drupal::config('system.maintenance')->get('enabled');
 }
 
 /**

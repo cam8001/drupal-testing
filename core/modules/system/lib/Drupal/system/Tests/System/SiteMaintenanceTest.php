@@ -119,4 +119,39 @@ class SiteMaintenanceTest extends WebTestBase {
     $this->drupalPostForm($path, array(), t('Log in'));
     $this->assertText($user_message);
   }
+
+  /**
+   * Tests cached pages are not shown to users when in maintenance mode.
+   */
+  function testCachedPagesNotServed() {
+    // Log in as admin user and turn on page caching.
+    $this->drupalLogin($this->admin_user);
+    $edit = array(
+      'page_cache_maximum_age' => 300,
+      'cache' => 1,
+    );
+    $this->drupalPostForm('admin/config/development/performance', $edit, t('Save configuration'));
+
+    // Create a node that we can check for caching.
+    $edit = array(
+      'title' => 'do not show this node',
+    );
+    $this->drupalCreateNode($edit);
+    // Visit a node page as an anonymous user.
+    $this->drupalLogout();
+    $this->drupalGet('node/1');
+
+    // Turn on maintenance mode.
+    $this->drupalLogin($this->admin_user);
+    $edit = array(
+      'maintenance_mode' => 1,
+    );
+    $this->drupalPostForm('admin/config/development/maintenance', $edit, t('Save configuration'));
+
+    // Check that a cached node page is not shown in maintenance mode.
+    $this->drupalLogout();
+    $this->drupalGet('node/1');
+    $this->assertText('Site under maintenance', 'Cached pages not shown in maintenance mode.');
+  }
+
 }
