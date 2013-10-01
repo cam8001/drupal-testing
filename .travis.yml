@@ -20,7 +20,7 @@ before_script:
   # Get a zip of the drush master. Only the most recent version of drush works
   # with Drupal 8.
   - wget -O /tmp/master.zip https://github.com/drush-ops/drush/archive/master.zip 
-  - unzip /tmp/master.zip -d /tmp/drush-master/
+  - unzip /tmp/master.zip -d /tmp/
   - alias drush='/tmp/drush-master/drush'
 
   # Import the PHP configuration.
