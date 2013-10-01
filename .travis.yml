@@ -21,7 +21,7 @@ before_script:
   # with Drupal 8.
   - wget -O /tmp/master.zip https://github.com/drush-ops/drush/archive/master.zip 
   - unzip /tmp/master.zip -d /tmp/
-  - export PATH="$PATH:/tmp/drush-master/drush"
+  - export PATH="$PATH:/tmp/drush-master/"
 
   # Import the PHP configuration.
   - phpenv config-add core/misc/travis-ci/php.ini
