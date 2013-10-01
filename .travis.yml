@@ -17,12 +17,10 @@ before_script:
   - sudo cp $HOME/.phpenv/versions/`php -r "print PHP_VERSION;"`/etc/php-fpm.conf.default $HOME/.phpenv/versions/`php -r "print PHP_VERSION;"`/etc/php-fpm.conf
   - $HOME/.phpenv/versions/`php -r "print PHP_VERSION;"`/sbin/php-fpm
 
-  # Install Drush. Newer drush versions won't run site-install because Backdrop
-  # doesn't match expectations about Drupal 7/8 versions. Drush 5.7 doesn't
-  # check the version at all, so it works for now.
-  - pear channel-discover pear.drush.org
-  - pear install drush/drush-5.7.0
-  - phpenv rehash
+  # Get a zip of the drush master. Only the most recent version of drush works
+  # with Drupal 8.
+  - wget --quiet https://github.com/drush-ops/drush/archive/master.zip | unzip -c -d /tmp/drush-master/
+  - alias drush='/tmp/drush-master/drush'
 
   # Import the PHP configuration.
   - phpenv config-add core/misc/travis-ci/php.ini
